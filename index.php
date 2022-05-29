@@ -31,6 +31,7 @@
         <!-- Responsive CSS -->
         <link href="css/responsive.css" rel="stylesheet">
     </head>
+    
     <body>
         <!--iqoniq Wrapper Start-->  
         <div class="iq_wrapper">
@@ -101,7 +102,7 @@
                                 <button class="dl-trigger">Open Menu</button>
                                 <ul class="dl-menu">
                                     <li class="menu-item mg-parent-menu">
-                                        <a href="index-2.html">home</a>
+                                        <a href="index.php">home</a>
                                     </li>
                                     <li><a href="about-us.html">About us</a></li>
                                     <li class="menu-item mg-parent-menu"><a href="#">course</a>

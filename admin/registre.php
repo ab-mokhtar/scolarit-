@@ -14,6 +14,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 -->
+<?php
+  // Initialiser la session
+  session_start();
+  // Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
+  if(!isset($_SESSION["username"])){
+    header("Location: /projet");
+    exit(); 
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,17 +69,44 @@
                     </a>
                 </li>
                 <li>
-                    <a href="players.php">
-                        <i class="now-ui-icons location_map-big"></i>
-                        <p>Liste Players</p>
-                    </a>
+                  
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <i class="now-ui-icons ui-1_bell-53"></i>   enseignant
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="listeEns.php">liste des enseignant</a>
+    <a class="dropdown-item" href="newEnsg.php">ajouter enseignant</a>
+
+  </div>
+                            
                 </li>
                 <li>
-                    <a href="games.php">
-                        <i class="now-ui-icons ui-1_bell-53"></i>
-                        <p>Games</p>
-                    </a>
+               
+                        
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <i class="now-ui-icons ui-1_bell-53"></i>   etudiants
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="etudiants.php">liste des etudiants</a>
+    <a class="dropdown-item" href="newEtudiant.php">ajouter etudiant</a>
+
+  </div>
+                            
+                       
+                  
                 </li>
+                <li>
+               
+                        
+               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+               <i class="now-ui-icons ui-1_bell-53"></i>   Affectation
+               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+<a class="dropdown-item" href="listeaffectation.php">Affecter</a>
+<a class="dropdown-item" href="affectation.php">liste des Affectation</a>
+
+</div>
+           
+      
+ 
+</li>
                 <li>
                     <a href="registre.php">
                         <i class="now-ui-icons users_single-02"></i>
@@ -94,22 +130,21 @@
                 
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
                    
-                    <ul class="navbar-nav">
+                <ul class="navbar-nav">
                         
                         <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                <?php echo $_SESSION['username']; ?><span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                    <a class="dropdown-item" href="logout.php">
+                                 logout
+                                        
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
+                                    <form id="logout-form" action="logout.php" method="POST" style="display: none;">
+                                        
                                     </form>
                                 </div>
                             </li>
@@ -160,7 +195,7 @@ $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 if($conn === false){
     die("ERREUR : Impossible de se connecter. " . mysqli_connect_error());
 }
-                             $query = "SELECT * FROM `users` ";
+                             $query = "SELECT * FROM `users` where actif =1 ";
                              $users = mysqli_query($conn,$query) or die(mysql_error()); 
                             ?>
                             <?php
@@ -168,20 +203,20 @@ if($conn === false){
                         ?>
                         <tr>
                             <td>
-                            <?php echo $user ['username'] ?>
+                            <?php echo $user ['name'] ?>
+                            </td>
+                            <td>
+                            <?php echo $user ['last_name'] ?>
+                            </td>
+                            <td>
+                            <?php echo $user ['phone'] ?>
                             </td>
                             <td>
                             <?php echo $user ['email'] ?>
                             </td>
-                            <td>
-                            <?php echo $user ['username'] ?>
-                            </td>
-                            <td>
-                            <?php echo $user ['username'] ?>
-                            </td>
                             <td class="text-right">
-                            <form action="/user/{{ $user->id }}" method="post">
-                            
+                            <form action="deleteuser.php" method="post">
+                            <input type="hidden" name="id" value=<?php echo $user ['id'] ?>>
                             <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                             </td>

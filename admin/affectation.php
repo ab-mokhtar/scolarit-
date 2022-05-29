@@ -14,6 +14,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 -->
+<?php
+  // Initialiser la session
+  session_start();
+  // Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
+  if(!isset($_SESSION["username"])){
+    header("Location: /projet");
+    exit(); 
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,7 +55,7 @@
             <img src="../assets/img/logo.jpg"></img>
         </div>
         <div class="sidebar-wrapper" id="sidebar-wrapper">
-            <ul class="nav">
+        <ul class="nav">
                 <li>
                     <a href="dashboard.php">
                         <i class="now-ui-icons design_app"></i>
@@ -60,17 +69,41 @@
                     </a>
                 </li>
                 <li>
-                    <a href="players.php">
-                        <i class="now-ui-icons location_map-big"></i>
-                        <p>Liste Players</p>
-                    </a>
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <i class="now-ui-icons ui-1_bell-53"></i>   enseignant
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="listeEns.php">liste des enseignant</a>
+    <a class="dropdown-item" href="newEnsg.php">ajouter enseignant</a>
+
                 </li>
                 <li>
-                    <a href="games.php">
-                        <i class="now-ui-icons ui-1_bell-53"></i>
-                        <p>Games</p>
-                    </a>
+               
+                        
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <i class="now-ui-icons ui-1_bell-53"></i>   etudiants
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    <a class="dropdown-item" href="etudiants.php">liste des etudiants</a>
+    <a class="dropdown-item" href="newEtudiant.php">ajouter etudiant</a>
+
+  </div>
+                            
+                       
+                  
                 </li>
+                <li>
+               
+                        
+               <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+               <i class="now-ui-icons ui-1_bell-53"></i>   Affectation
+               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+<a class="dropdown-item" href="listeaffectation.php">Affecter</a>
+<a class="dropdown-item" href="affectation.php">liste des Affectation</a>
+
+</div>
+           
+      
+ 
+</li>
                 <li>
                     <a href="registre.php">
                         <i class="now-ui-icons users_single-02"></i>
@@ -94,22 +127,21 @@
                 
                 <div class="collapse navbar-collapse justify-content-end" id="navigation">
                    
-                    <ul class="navbar-nav">
+                <ul class="navbar-nav">
                         
                         <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                <?php echo $_SESSION['username']; ?><span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                    <a class="dropdown-item" href="logout.php">
+                                 logout
                                         
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
+                                    <form id="logout-form" action="logout.php" method="POST" style="display: none;">
+                                        
                                     </form>
                                 </div>
                             </li>
@@ -126,45 +158,92 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title"> Players</h4>
+                <h4 class="card-title"> Liste des Affectation</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table">
                         <thead class=" text-primary">
                         <th>
-                            Name
+                        Classe
                         </th>
                         <th>
-                            cin
+                        Module
                         </th>
                         <th>
-                            phone
+                        Enseignant
                         </th>
+                       
                         
                         </thead>
                         <tbody>
-                        @foreach($players as $players)
+                            <?php
+                            // Informations d'identification
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'projet_web');
+ 
+// Connexion à la base de données MySQL 
+$conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+ 
+// Vérifier la connexion
+if($conn === false){
+    die("ERREUR : Impossible de se connecter. " . mysqli_connect_error());
+}
+                             $query = "SELECT * FROM `affectation`";
+                             $classes = mysqli_query($conn,$query) or die(mysql_error()); 
+                             $query= "SELECT * FROM `module`";
+                             $modules = mysqli_query($conn,$query) or die(mysql_error()); 
+                             $query= "SELECT * FROM `enseignant`";
+                             $enseignant = mysqli_query($conn,$query) or die(mysql_error()); 
+
+
+                            ?>
+                            
+                            <?php
+                        foreach($classes as $classe){
+                        ?>
+                        <form action="deleteAffec.php" method="POST">
                         <tr>
                             <td>
-                            {{ $players->name }}
+                            <?php 
+                             $m=$classe ['id_classe'];
+                            $query=("SELECT * FROM classe where id=$m");
+                            $modules = $conn->query($query);
+                            while($c=$modules->fetch_assoc()){
+                                echo $c['label'];
+                            }
+                             ?>
                             </td>
-                            <td>
-                            {{ $players->cin }}
+                            <td><?php
+                            $m=$classe ['id_mod'];
+                            $query=("SELECT * FROM module where id=$m");
+                            $modules = $conn->query($query);
+                            while($m=$modules->fetch_assoc()){
+                                echo $m['libelle'];
+                            }
+                             ?>
                             </td>
-                            <td>
-                            {{ $players->tel }}
-                            </td>
-                            
+                           <td><?php
+                           $m=$classe ['id_ensei'];
+                            $query=("SELECT * FROM enseignant where id=$m");
+                            $enseignants = $conn->query($query);
+                            while($ens=$enseignants->fetch_assoc()){
+                                echo $ens['nom']." ".$ens['prenom'];
+                            }
+                             ?>
+                           </td>
                             <td class="text-right">
-                            <form action="/players/{{ $players->id }}" method="post">
-                            {{ csrf_field() }}
-                            {{ method_field('PUT') }}
-                            <button type="submit" class="btn btn-danger">Banner</button>
+                            <input type="hidden" name="id" value=<?php echo $classe['id_ensei']?>>
+                            <input type="hidden" name="id_classe" value=<?php echo $classe['id_classe']?>>
+                            <input type="hidden" name="id_mod" value=<?php echo $classe['id_mod']?>>
+                            <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                             </td>
-                        </tr>
-                        @endforeach 
+                        </tr><?php
+                        }
+                        ?>
                         </tbody>
                     </table>
                 </div>

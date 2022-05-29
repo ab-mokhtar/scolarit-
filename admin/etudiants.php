@@ -158,42 +158,87 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title"> Déclarations</h4>
+                <h4 class="card-title"> Etudaints</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table">
                         <thead class=" text-primary">
                         <th>
-                            Matricule
+                        cin
                         </th>
                         <th>
-                            type du panne
+                        nom
                         </th>
                         <th>
-                            localisation
+                        prenom
                         </th>
-
+                        <th>
+                        date_nais
+                        </th>
+                        <th>
+                        email
+                        </th>
+                        <th>
+                        tel
+                        </th>
+                        <th>
+                        adresse
+                        </th>
                         
                         </thead>
                         <tbody>
-                        @foreach($vals as $vals)
+                            <?php
+                            // Informations d'identification
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'projet_web');
+ 
+// Connexion à la base de données MySQL 
+$conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+ 
+// Vérifier la connexion
+if($conn === false){
+    die("ERREUR : Impossible de se connecter. " . mysqli_connect_error());
+}
+                             $query = "SELECT * FROM `etudiants` where etat =1 ";
+                             $users = mysqli_query($conn,$query) or die(mysql_error()); 
+                            ?>
+                            <?php
+                        foreach($users as $user){
+                        ?>
                         <tr>
                             <td>
-                            {{ $vals['matricule'] }}
+                            <?php echo $user ['cin'] ?>
                             </td>
                             <td>
-                            {{ $vals['type_panne'] }}
+                            <?php echo $user ['nom'] ?>
                             </td>
                             <td>
-                            {{ $vals['localisation'] }}
+                            <?php echo $user ['prenom'] ?>
                             </td>
-                            
+                            <td>
+                            <?php echo $user ['date_nais'] ?>
+                            </td>
+                            <td>
+                            <?php echo $user ['email'] ?>
+                            </td>
+                            <td>
+                            <?php echo $user ['tel'] ?>
+                            </td>
+                            <td>
+                            <?php echo $user ['adresse'] ?>
+                            </td>
                             <td class="text-right">
-                           
+                            <form action="deleteuser.php" method="post">
+                            <input type="hidden" name="id" value=<?php echo $user ['id'] ?>>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                             </td>
-                        </tr>
-                        @endforeach 
+                        </tr><?php
+                        }
+                        ?>
                         </tbody>
                     </table>
                 </div>

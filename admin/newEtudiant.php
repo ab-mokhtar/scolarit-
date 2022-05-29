@@ -15,6 +15,23 @@
 
 -->
 <?php
+                            // Informations d'identification
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'projet_web');
+ 
+// Connexion à la base de données MySQL 
+$conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+ 
+// Vérifier la connexion
+if($conn === false){
+    die("ERREUR : Impossible de se connecter. " . mysqli_connect_error());
+}
+                             $query = "SELECT * FROM `classe`";
+                             $users = mysqli_query($conn,$query) or die(mysql_error()); 
+                            ?>
+<?php
   // Initialiser la session
   session_start();
   // Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
@@ -32,7 +49,7 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        @yield('title')
+        Add User
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -158,45 +175,80 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title"> Déclarations</h4>
+                <h4 class="card-title">    <h3>Ajouter Etudiant</h3></h4>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class=" text-primary">
-                        <th>
-                            Matricule
-                        </th>
-                        <th>
-                            type du panne
-                        </th>
-                        <th>
-                            localisation
-                        </th>
+                
+                <form method="post" action="insertEtud.php">
+  
+                <div class="form-group">
+            <label for="name">CIN</label>
+            <input id="cin" type="text" class="form-control " name="cin"  required autocomplete="cin" autofocus>
+                               
+        </div>
+        
+        <div class="form-group">
+            <label for="name">Nom</label>
+            <input id="name" type="text" class="form-control " name="name"  required autocomplete="name" autofocus>
+                               
+        </div>
 
-                        
-                        </thead>
-                        <tbody>
-                        @foreach($vals as $vals)
-                        <tr>
-                            <td>
-                            {{ $vals['matricule'] }}
-                            </td>
-                            <td>
-                            {{ $vals['type_panne'] }}
-                            </td>
-                            <td>
-                            {{ $vals['localisation'] }}
-                            </td>
+        <div class="form-group">
+            <label for="name">Prenom</label>
+            <input id="last_name" type="text" class="form-control" name="last_name"  required autocomplete="last_name" autofocus>
+                                
+                                   
+                                
+        </div>
+        <div class="form-group">
+            <label for="name">Date Naissance</label>
+            <input id="date" type="Date" class="form-control " name="date"  required autocomplete="date" autofocus>
+                               
+        </div>
+        <div class="form-group">
+            <label for="name">Tel</label>
+            <input id="phone" type="text" class="form-control " name="phone"  required autocomplete="phone" autofocus>
+
+                                
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail</label>
+            <input id="email" type="email" class="form-control " name="email"  required autocomplete="email">
+
+                                
+        </div>
+        <div class="form-group">
+            <label for="email">Adresse</label>
+            <input id="adress" type="text" class="form-control " name="adress"  required autocomplete="adress">
+
+                                
+        </div>
+       
+       
+        <div class="form-group">
+            <label for="niveau">Classe</label>
+            <select  class="form-control " name="Classe" >
+            <?php
+                        foreach($users as $user){
+                          echo "<option value=".$user ['id'].">".$user ['label']."</option>";
                             
-                            <td class="text-right">
-                           
-                            </td>
-                        </tr>
-                        @endforeach 
-                        </tbody>
-                    </table>
-                </div>
+                            }
+                            ?>
+            </select>
+           
+            
+
+                                
+        </div>
+      
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign Up</button>
+            
+        </div>
+    </form>
+                
             </div>
         </div>
     </div>
@@ -248,7 +300,7 @@
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/demo/demo.js"></script>
-@yield('script')
+
 </body>
 
 </html>
