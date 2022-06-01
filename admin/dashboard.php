@@ -32,7 +32,8 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-       Dashboard
+    Tek-up
+
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -65,7 +66,7 @@
                 <li>
                     <a href="newuser.php">
                         <i class="now-ui-icons education_atom"></i>
-                        <p>Add user</p>
+                        <p>Ajouter un utilisateur</p>
                     </a>
                 </li>
                 <li>
@@ -84,6 +85,10 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <a class="dropdown-item" href="etudiants.php">liste des etudiants</a>
     <a class="dropdown-item" href="newEtudiant.php">ajouter etudiant</a>
+    <a class="dropdown-item" href="abssence.php">Abssence</a>
+    <a class="dropdown-item" href="Notes.php">Notes</a>
+    <a class="dropdown-item" href="listeNotes.php">liste Notes</a>
+    <a class="dropdown-item" href="listeAbssence.php">liste Absence</a>
 
   </div>
                             

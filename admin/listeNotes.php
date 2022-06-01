@@ -15,6 +15,27 @@
 
 -->
 <?php
+                            // Informations d'identification
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'projet_web');
+ 
+// Connexion à la base de données MySQL 
+$conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+ 
+// Vérifier la connexion
+if($conn === false){
+    die("ERREUR : Impossible de se connecter. " . mysqli_connect_error());
+}
+                             $query = "SELECT * FROM `classe`";
+                             $classes = mysqli_query($conn,$query) or die(mysql_error()); 
+                             
+                             
+                           
+
+                            ?>
+<?php
   // Initialiser la session
   session_start();
   // Vérifiez si l'utilisateur est connecté, sinon redirigez-le vers la page de connexion
@@ -32,7 +53,7 @@
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-    Tek-up
+       Tek-up
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -86,10 +107,9 @@
     <a class="dropdown-item" href="newEtudiant.php">ajouter etudiant</a>
     <a class="dropdown-item" href="abssence.php">Abssence</a>
     <a class="dropdown-item" href="Notes.php">Notes</a>
+
     <a class="dropdown-item" href="listeNotes.php">liste Notes</a>
     <a class="dropdown-item" href="listeAbssence.php">liste Absence</a>
-
-    
 
   </div>
                             
@@ -160,57 +180,97 @@
         <div class="panel-header panel-header-sm">
         </div>
         <div class="content">
+            
         <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">    <h3>Ajouter un utilisateur</h3></h4>
+                <h4 class="card-title"> Ajouter Note</h4>
             </div>
             <div class="card-body">
+               <form methode="GET" >
+            <label for="name">Classe :</label>
+                <select  name="idclasse" >
+                <?php
+                        
+                        while($classe = mysqli_fetch_assoc($classes)):?>
+                           <option value=<?php echo $classe['id'];?>><?php echo$classe ['label']?></option>
+                            <?php
+                            endwhile;
+                            ?>
+            </select>
+            <input type=submit name="filter" value="filtrer" />
+                        </form>
+                <div class="table-responsive">
                 
-                <form method="post" action="insert.php">
-  
-     
-        <div class="form-group">
-            <label for="name">nom</label>
-            <input id="name" type="text" class="form-control " name="name"  required autocomplete="name" autofocus>
-                               
-        </div>
+                    <table class="table">
+                        
+                        <thead class=" text-primary">
+                        <th>
+                        Etudiant
+                        </th>
+                        <th>
+                        Module
+                        </th>
+                        <th>
+                        Date
+                        </th>
+                        <th>
+                        Note
+                        </th>
+                        
+                        </thead>
+                        <tbody>
+                           
+                            
+                            <?php
+                              if (isset( $_GET['filter'])){
+                                 $c=$_GET['idclasse'];
+                            
+                             $query=("SELECT * FROM `examen` WHERE `id_etud`in (SELECT id FROM `etudiants` where classe =$c)");
+                             $Notes= mysqli_query($conn,$query) or die(mysql_error()); 
+                             $query= "SELECT * FROM `module`where id in (select id_mod from module_par_spec where id_spec in (select id_spec from classe where id =$c) AND id_niv in (select niveau from classe where id =$c) )";
+                             $modules = mysqli_query($conn,$query) or die(mysql_error()); 
+                             
+                        foreach($Notes as $Note){
+                        ?>
+                        <tr>
+                            <td>
+                            <?php 
+                            $id=$Note['id_etud'];
+                             $query= "SELECT * FROM `etudiants` where id =$id";
+                             $etudiants = mysqli_query($conn,$query) or die(mysql_error()); 
+                             foreach($etudiants as $etudiant){
+                            echo $etudiant ['nom']." ".$etudiant ['prenom'];} ?>
+                            
+                            </td>
+                            <td>
+            <?php   
+                         $id=$Note['id_m'];
+                         $query= "SELECT * FROM `module` where id =$id";
+                         $modules = mysqli_query($conn,$query) or die(mysql_error()); 
+                         foreach($modules as $module){
+                        echo $module ['libelle'];
+                        }} ?>
+                            
+                        
+                            </td>
+                            <td>
+                          <?php echo $Note['date_ex'];?>
+                            </td>
+                            <td>
+                            <?php echo $Note['note'];?>
 
-        <div class="form-group">
-            <label for="name">prenom</label>
-            <input id="last_name" type="text" class="form-control" name="last_name"  required autocomplete="last_name" autofocus>
-                                
-                                   
-                                
-        </div>
-        <div class="form-group">
-            <label for="name">Tel</label>
-            <input id="phone" type="text" class="form-control " name="phone"  required autocomplete="phone" autofocus>
+                            </td>
+                            <td class="text-right">
 
-                                
-        </div>
-
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input id="email" type="email" class="form-control " name="email"  required autocomplete="email">
-
-                                
-        </div>
-
-        <div class="form-group">
-            <label for="password">mot de passe</label>
-            <input id="password" type="password" class="form-control " name="password" required autocomplete="new-password">
-
-                          
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Ajouter</button>
-            
-        </div>
-    </form>
-                
+                            </td>
+                        </tr><?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -262,7 +322,7 @@
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/demo/demo.js"></script>
-
+@yield('script')
 </body>
 
 </html>

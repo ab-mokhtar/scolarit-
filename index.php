@@ -63,7 +63,7 @@
                         <div class="navigation-wrapper pull-left">
                             <div class="navigation pull-left">
                                 <ul>
-                                    <li class="active"><a href="index-2.html">Home</a></li>
+                                    <li class="active"><a href="index.php">Home</a></li>
                                     <li><a href="about-us.html">About Us</a></li>
                                     <li><a href="#">Courses</a>
                                         <ul class="children">

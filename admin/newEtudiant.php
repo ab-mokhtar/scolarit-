@@ -49,7 +49,7 @@ if($conn === false){
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Add User
+    Tek-up
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -82,7 +82,7 @@ if($conn === false){
                 <li>
                     <a href="newuser.php">
                         <i class="now-ui-icons education_atom"></i>
-                        <p>Add user</p>
+                        <p>Ajouter un utilisateur</p>
                     </a>
                 </li>
                 <li>
@@ -101,6 +101,11 @@ if($conn === false){
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
     <a class="dropdown-item" href="etudiants.php">liste des etudiants</a>
     <a class="dropdown-item" href="newEtudiant.php">ajouter etudiant</a>
+    <a class="dropdown-item" href="abssence.php">Abssence</a>
+
+    <a class="dropdown-item" href="Notes.php">Notes</a>
+    <a class="dropdown-item" href="listeNotes.php">liste Notes</a>
+    <a class="dropdown-item" href="listeAbssence.php">liste Absence</a>
 
   </div>
                             
@@ -244,7 +249,7 @@ if($conn === false){
       
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign Up</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Ajouter</button>
             
         </div>
     </form>
